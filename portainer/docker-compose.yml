@@ -1,0 +1,39 @@
+services:
+  portainer:
+    container_name: portainer
+    environment:
+      TZ: America/Costa_Rica
+    image: portainer/portainer-ce:latest
+    mem_limit: "314572800"
+    mem_reservation: "209715200"
+    networks:
+      homelab:
+        ipv4_address: 172.20.0.20
+    ports:
+      - mode: ingress
+        target: 9000
+        published: "9000"
+        protocol: tcp
+      - mode: ingress
+        target: 9443
+        published: "9443"
+        protocol: tcp
+    restart: unless-stopped
+    volumes:
+      - type: bind
+        source: /var/run/docker.sock
+        target: /var/run/docker.sock
+        bind: {}
+      - type: bind
+        source: /home/mzuniga/homelab/portainer
+        target: /data
+        bind: {}
+networks:
+  default:
+    name: homelab_default
+  homelab:
+    name: homelab_homelab
+    external: true
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16

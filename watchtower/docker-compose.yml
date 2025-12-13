@@ -1,0 +1,21 @@
+services:
+  watchtower:
+    container_name: watchtower
+    environment:
+      DOCKER_API_VERSION: "1.44"
+      TZ: America/Costa_Rica
+      WATCHTOWER_CLEANUP: "true"
+      WATCHTOWER_INCLUDE_RESTARTING: "true"
+      WATCHTOWER_INCLUDE_STOPPED: "false"
+      WATCHTOWER_SCHEDULE: 0 0 3 * * *
+    image: containrrr/watchtower:latest
+    mem_limit: "104857600"
+    mem_reservation: "52428800"
+    networks:
+      default: null
+    restart: unless-stopped
+    volumes:
+      - type: bind
+        source: /var/run/docker.sock
+        target: /var/run/docker.sock
+        bind: {}

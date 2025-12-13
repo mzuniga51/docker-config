@@ -1,0 +1,43 @@
+services:
+  nginx:
+    container_name: nginx-proxy-manager
+    environment:
+      TZ: America/Costa_Rica
+    image: jc21/nginx-proxy-manager:latest
+    mem_limit: "314572800"
+    mem_reservation: "209715200"
+    networks:
+      homelab:
+        ipv4_address: 172.20.0.40
+    ports:
+      - mode: ingress
+        target: 80
+        published: "80"
+        protocol: tcp
+      - mode: ingress
+        target: 443
+        published: "443"
+        protocol: tcp
+      - mode: ingress
+        target: 81
+        published: "81"
+        protocol: tcp
+    restart: unless-stopped
+    volumes:
+      - type: bind
+        source: /home/mzuniga/homelab/nginx-proxy-manager/data
+        target: /data
+        bind: {}
+      - type: bind
+        source: /home/mzuniga/homelab/nginx-proxy-manager/letsencrypt
+        target: /etc/letsencrypt
+        bind: {}
+networks:
+  default:
+    name: homelab_default
+  homelab:
+    name: homelab_homelab
+    external: true
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16

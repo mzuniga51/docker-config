@@ -1,0 +1,25 @@
+services:
+  tailscale:
+    cap_add:
+      - NET_ADMIN
+      - SYS_MODULE
+    container_name: tailscale
+    environment:
+      TS_AUTHKEY: kttFK1Z7QM11CNTRL
+      TS_STATE_DIR: /var/lib/tailscale
+      TS_USERSPACE: "false"
+    image: tailscale/tailscale:latest
+    mem_limit: "157286400"
+    mem_reservation: "104857600"
+    network_mode: host
+    privileged: true
+    restart: unless-stopped
+    volumes:
+      - type: bind
+        source: /home/mzuniga/homelab/tailscale
+        target: /var/lib/tailscale
+        bind: {}
+      - type: bind
+        source: /dev/net/tun
+        target: /dev/net/tun
+        bind: {}

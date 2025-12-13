@@ -1,0 +1,73 @@
+services:
+  omada:
+    container_name: omada
+    environment:
+      MANAGE_HTTP_PORT: "8088"
+      MANAGE_HTTPS_PORT: "8043"
+      PORTAL_HTTP_PORT: "8888"
+      PORTAL_HTTPS_PORT: "8843"
+      SHOW_MONGODB_LOGS: "false"
+      SHOW_SERVER_LOGS: "true"
+      TZ: America/Costa_Rica
+    image: mbentley/omada-controller:6.0
+    mem_limit: "4194304000"
+    mem_reservation: "3670016000"
+    networks:
+      homelab:
+        ipv4_address: 172.20.0.10
+    ports:
+      - mode: ingress
+        target: 8088
+        published: "8088"
+        protocol: tcp
+      - mode: ingress
+        target: 8043
+        published: "8043"
+        protocol: tcp
+      - mode: ingress
+        target: 8843
+        published: "8843"
+        protocol: tcp
+      - mode: ingress
+        target: 27001
+        published: "27001"
+        protocol: udp
+      - mode: ingress
+        target: 29810
+        published: "29810"
+        protocol: udp
+      - mode: ingress
+        target: 29811
+        published: "29811"
+        protocol: tcp
+      - mode: ingress
+        target: 29812
+        published: "29812"
+        protocol: tcp
+      - mode: ingress
+        target: 29813
+        published: "29813"
+        protocol: tcp
+      - mode: ingress
+        target: 29814
+        published: "29814"
+        protocol: tcp
+    restart: unless-stopped
+    volumes:
+      - type: bind
+        source: /home/mzuniga/homelab/omada/data
+        target: /opt/tplink/EAPController/data
+        bind: {}
+      - type: bind
+        source: /home/mzuniga/homelab/omada/logs
+        target: /opt/tplink/EAPController/logs
+        bind: {}
+networks:
+  default:
+    name: homelab_default
+  homelab:
+    name: homelab_homelab
+    external: true
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16

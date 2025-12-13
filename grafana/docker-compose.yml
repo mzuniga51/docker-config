@@ -1,0 +1,34 @@
+services:
+  grafana:
+    container_name: grafana
+    environment:
+      GF_INSTALL_PLUGINS: ""
+      GF_SECURITY_ADMIN_PASSWORD: corderitos
+      GF_SECURITY_ADMIN_USER: mzuniga
+      TZ: America/Costa_Rica
+    image: grafana/grafana:latest
+    mem_limit: "419430400"
+    mem_reservation: "314572800"
+    networks:
+      homelab:
+        ipv4_address: 172.20.0.31
+    ports:
+      - mode: ingress
+        target: 3000
+        published: "3100"
+        protocol: tcp
+    restart: unless-stopped
+    volumes:
+      - type: bind
+        source: /home/mzuniga/homelab/grafana
+        target: /var/lib/grafana
+        bind: {}
+networks:
+  default:
+    name: homelab_default
+  homelab:
+    name: homelab_homelab
+    external: true
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16

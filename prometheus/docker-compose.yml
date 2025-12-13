@@ -1,0 +1,39 @@
+services:
+  prometheus:
+    command:
+      - --config.file=/etc/prometheus/prometheus.yml
+      - --storage.tsdb.path=/prometheus
+      - --storage.tsdb.retention.time=30d
+    container_name: prometheus
+    environment:
+      TZ: America/Costa_Rica
+    image: prom/prometheus:latest
+    mem_limit: "734003200"
+    mem_reservation: "524288000"
+    networks:
+      homelab:
+        ipv4_address: 172.20.0.30
+    ports:
+      - mode: ingress
+        target: 9090
+        published: "9090"
+        protocol: tcp
+    restart: unless-stopped
+    volumes:
+      - type: bind
+        source: /home/mzuniga/homelab/prometheus/config
+        target: /etc/prometheus
+        bind: {}
+      - type: bind
+        source: /home/mzuniga/homelab/prometheus/data
+        target: /prometheus
+        bind: {}
+networks:
+  default:
+    name: homelab_default
+  homelab:
+    name: homelab_homelab
+    external: true
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16
