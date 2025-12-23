@@ -5,6 +5,9 @@ services:
       GF_INSTALL_PLUGINS: ""
       GF_SECURITY_ADMIN_PASSWORD: corderitos
       GF_SECURITY_ADMIN_USER: mzuniga
+      GF_SECURITY_ALLOW_EMBEDDING: "true"
+      GF_AUTH_ANONYMOUS_ENABLED: "true"
+      GF_AUTH_ANONYMOUS_ORG_ROLE: Viewer
       TZ: America/Costa_Rica
     image: grafana/grafana:latest
     mem_limit: "419430400"
